@@ -1,0 +1,174 @@
+<!--
+        auteur : ANGE MERVEILLE GRACIA YEMELE KANA
+        date : 15 OCTOBRE 2023
+       
+-->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Click Bouton</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style type="text/css">
+        #main {
+            background-color: silver;
+            height: 900px;
+        }
+
+        #btnClick {
+            margin: 50px;
+        }
+
+        p {
+            margin: 50px 0;
+            font-size: 1.5em;
+        }
+
+        h1 {
+            margin-top: 1cm;
+        }
+
+        #table-container{
+            text-align: center;
+        }
+
+        #table {
+            margin: 0 auto;
+        }
+
+        #table th, #table td {
+            border: 2px solid black; /* Bordures pour les cellules th et td */
+            padding: 5px;
+        }
+        hr{
+            border: 2px solid;
+            color : green;
+        }
+    </style>
+    <script>
+            const CLICK_MAX = 20;
+            let nombreClick = 0;  
+            let tempsDebut;
+            let tempsFin;
+            let result = 0;
+            var tableau = [];
+            var nbreValeur = 0;
+
+            function cliquerMoi()
+            {
+                if (nombreClick == 0)
+                {
+                tempsDebut = new Date();
+                }
+
+                nombreClick++;
+                document.querySelector("#infoClick").innerHTML = nombreClick;
+
+                if (nombreClick == CLICK_MAX)
+                {
+                    tempsFin = new Date();
+                    result = tempsFin - tempsDebut;
+                    document.querySelector("input[type=button]").disabled = true;
+                    document.querySelector("#message").innerHTML = "Tu as cliqué " +CLICK_MAX+ " fois en " + result + " millisecondes";
+                    tableau.push(result);
+
+                    afficherTempsTable();
+                }
+            }
+
+            function rejouerJeu()
+            {
+                
+                if (tableau.length == CLICK_MAX)
+                {
+                    reinitialiserTableau();
+                }
+
+                nombreClick = 0;
+                document.querySelector("#infoClick").innerHTML = nombreClick;
+                document.querySelector("input[type=button]").disabled = false;
+                document.querySelector("#message").innerHTML = "";
+                
+            }
+
+            function afficherTempsTable() 
+            {
+                document.querySelector("#resume").innerHTML = "Bilan de vos essais";
+                var table = document.querySelector("#table");
+                var tbody = table.getElementsByTagName("tbody")[0];
+
+                for (let i = nbreValeur; i < tableau.length; i++) {
+                    var newRow = tbody.insertRow(tbody.rows.length);
+                    var cell1 = newRow.insertCell(0);
+                    var cell2 = newRow.insertCell(1);
+                    cell1.innerHTML = i + 1;
+                    cell2.innerHTML = tableau[i];
+                    nbreValeur++;
+                }
+                    
+
+                document.getElementById("table-container").style.display = "block";
+            }
+
+            function reinitialiserTableau()
+            {
+                nombreClick = 0;
+                tableau.length = 0; // Réinitialiser le tableau
+                document.querySelector("#infoClick").innerHTML = nombreClick;
+                document.querySelector("input[type=button]").disabled = false;
+                document.querySelector("#message").innerHTML = "";
+                table.innerHTML = ''; // Effacer le tableau des temps de clics
+            }
+
+
+            
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div id="main" class="col-10">
+
+                <form name="frmClique">
+                    <div class="text-center">
+                        <h1>Le clique rapide!!</h1>
+                        <p>Tu dois cliquer 20 fois le plus rapidement possible
+                        </p>
+                        <input type="button" class="btn btn-primary btn-lg" value="Clique Moi!" id="btnClick"
+                            name="btnClick" onclick="cliquerMoi()" />
+                        <br />
+                        <input type="button" value="Rejouer" class="btn btn-success btn-lg" id="btnRejouer"
+                            name="btnRejouer" onclick="rejouerJeu()" />
+                        
+                        <p># de cliques : <span id="infoClick">0</span></p>
+                        <h3 id="message"></h3>
+                        <br/>
+                        <h4 id="resume"></h4>
+                        <hr/>
+                        <div id="table-container" style="display: none;">
+                            <table id="table">
+                                <thead>
+                                    <tr>
+                                        <th>Numéro de Clic</th>
+                                        <th>Temps (ms)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col"></div>
+            
+            
+        </div>
+    </div>
+</body>
+
+</html>
